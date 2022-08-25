@@ -1,4 +1,4 @@
-﻿namespace bookaflight;
+﻿namespace BookAFlight;
 
 public class Program
 {

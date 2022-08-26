@@ -1,12 +1,9 @@
-.appsettings.json
-.appsettings.Development.json
-
 # globs
 Makefile.in
 *.userprefsś
 *.usertasks
 config.make
-config.status
+config.statu
 aclocal.m4
 install-sh
 autom4te.cache/
@@ -125,6 +122,7 @@ BenchmarkDotNet.Artifacts/
 
 # .NET Core
 project.lock.json
+appsettings.Development.json
 project.fragment.lock.json
 artifacts/
 

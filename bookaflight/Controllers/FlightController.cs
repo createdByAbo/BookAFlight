@@ -3,12 +3,18 @@
 namespace BookAFlight.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class IndexController : ControllerBase
+[Route("api/[controller]s")]
+public class FlightController : ControllerBase
 {
-    [HttpGet(Name = "GetIndex")]
-    public string Get()
+    [HttpGet()]
+    public string GetFlights()
     {
-        return "Index"; 
+        return "Index";
+    }
+
+    [HttpGet("{id}")]
+    public string GetFlightById(int id)
+    {
+        return id.ToString();
     }
 }

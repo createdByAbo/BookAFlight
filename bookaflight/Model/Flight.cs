@@ -18,24 +18,10 @@ namespace bookaflight.Model
 
         public string flightCode { get; set; }
 
-        public FlightClasses numberOfSeats { get; set; }
-        public class FlightClasses
-        {
-            public int numberOfFirstClassSeats { get; set; }
-            public int numberOfBuisnessClassSeats { get; set; }
-            public int numberOfEconomicClassSeats { get; set; }
+        public int numberOfFirstClassSeats { get; set; }
+        public int numberOfBuisnessClassSeats { get; set; }
+        public int numberOfEconomicClassSeats { get; set; }
 
-            public FlightClasses(
-                    int numberOfFirstClassSeats,
-                    int numberOfBuisnessClassSeats,
-                    int numberOfEconomicClassSeats
-            )
-            {
-                this.numberOfFirstClassSeats = numberOfFirstClassSeats;
-                this.numberOfBuisnessClassSeats = numberOfBuisnessClassSeats;
-                this.numberOfEconomicClassSeats = numberOfEconomicClassSeats;
-            }
-        }
 
         public Flight(
                 string startCity,
@@ -45,8 +31,7 @@ namespace bookaflight.Model
                 List<string> betweenApproaches,
                 DateTime startDate,
                 DateTime endDate,
-                string flightCode,
-                FlightClasses numberOfSeats
+                string flightCode
         )
         {
             this.Id = Id += 1;
@@ -58,7 +43,6 @@ namespace bookaflight.Model
             this.startDate = startDate;
             this.endDate = endDate;
             this.flightCode = flightCode;
-            this.numberOfSeats = numberOfSeats;
         }
     }
 }

@@ -1,6 +1,9 @@
+.appsettings.json
+.appsettings.Development.json
+
 # globs
 Makefile.in
-*.userprefs
+*.userprefsś
 *.usertasks
 config.make
 config.status
@@ -402,4 +405,3 @@ ASALocalRun/
 .mfractor/
 
 # Local History for Visual Studio
-.localhistory/

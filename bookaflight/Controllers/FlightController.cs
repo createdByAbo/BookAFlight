@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookAFlight.Controllers;
 
@@ -16,5 +17,23 @@ public class FlightController : ControllerBase
     public string GetFlightById(int id)
     {
         return id.ToString();
+    }
+
+    [HttpPost()]
+    public string CreateFlight()
+    {
+        return "";
+    }
+
+    [HttpDelete("{id}")]
+    public string DeleteFlight(int id)
+    {
+        return id.ToString();  
+    }
+
+    [HttpPatch("{id}")]
+    public string UpdateFlight(int id)
+    {
+        return "";
     }
 }

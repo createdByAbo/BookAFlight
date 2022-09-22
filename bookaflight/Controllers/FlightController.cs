@@ -1,16 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+using bookaflight.Model;
+
 namespace BookAFlight.Controllers;
 
 [ApiController]
 [Route("api/[controller]s")]
 public class FlightController : ControllerBase
 {
-    [HttpGet()]
-    public string GetFlights()
+    private readonly devEnvDbContext _context;
+
+    public FlightController(devEnvDbContext context)
     {
-        return "Index";
+        _context = context;
+    }
+
+    [HttpGet()]
+    public List<Fleet> GetFlights()
+    {
+        var Flights = _context.Fleets
+            .ToList();
+        return Flights;
     }
 
     [HttpGet("{id}")]

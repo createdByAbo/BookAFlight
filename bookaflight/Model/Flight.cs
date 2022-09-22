@@ -1,48 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace bookaflight.Model
 {
-    public class Flight
+    public partial class Flight
     {
-        public int Id { get; set; } = 0;
+        public int Id { get; set; }
+        public int AircraftId { get; set; }
+        public string StartCity { get; set; } = null!;
+        public string StartAirport { get; set; } = null!;
+        public DateTime StartDate { get; set; }
+        public string EndCity { get; set; } = null!;
+        public string EndAirport { get; set; } = null!;
+        public DateTime EndDate { get; set; }
+        public string? BeetweenAproche { get; set; }
+        public DateTime? BeetweenAprocheDate { get; set; }
+        public string FlightCode { get; set; } = null!;
+        public decimal? FirstClassSeatPrice { get; set; }
+        public decimal? BuisnessClassSeatPrice { get; set; }
+        public decimal? EconomicClassSeatPrice { get; set; }
+        public decimal RegistredBaggagePrice { get; set; }
+        public short NumberOfMaxPersonsWithRegistredBaggage { get; set; }
 
-        public string startCity { get; set; }
-        public string startAirport { get; set; }
-
-        public string endCity { get; set; }
-        public string endAirport { get; set; }
-
-        public List<string> betweenApproaches { get; set; }
-
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
-
-        public string flightCode { get; set; }
-
-        public int numberOfFirstClassSeats { get; set; }
-        public int numberOfBuisnessClassSeats { get; set; }
-        public int numberOfEconomicClassSeats { get; set; }
-
-
-        public Flight(
-                string startCity,
-                string startAirport,
-                string endCity,
-                string endAirport,
-                List<string> betweenApproaches,
-                DateTime startDate,
-                DateTime endDate,
-                string flightCode
-        )
-        {
-            this.Id = Id += 1;
-            this.startCity = startCity;
-            this.startAirport = startAirport;
-            this.endCity = endCity;
-            this.endAirport = endAirport;
-            this.betweenApproaches = betweenApproaches;
-            this.startDate = startDate;
-            this.endDate = endDate;
-            this.flightCode = flightCode;
-        }
+        public virtual Fleet Aircraft { get; set; } = null!;
     }
 }

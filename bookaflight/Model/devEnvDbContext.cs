@@ -29,7 +29,12 @@ namespace bookaflight.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=LOCALHOST;User Id=SA;Password=xhmue3Hvrcmx#; Database=devEnvDb");
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("devDb"));
             }
         }
 

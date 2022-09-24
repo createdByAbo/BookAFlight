@@ -17,7 +17,7 @@ public class FlightController : ControllerBase
         _context = context;
     }
 
-    [HttpGet()]
+    [HttpGet]
     public List<Fleet> GetFlights()
     {
         var Flights = _context.Fleets

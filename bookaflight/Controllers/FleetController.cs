@@ -58,22 +58,71 @@ namespace bookaflight.Controllers
         public List<Fleet> GetAircraft(int id)
         {
             var Aircraft = _context.Fleets
-                .Where(a => a.Id == id)
+                .Where(dbAircraft => dbAircraft.Id == id)
                 .ToList();
 
-            if (Aircraft.Count < 1)
-            {
-                Response.StatusCode = 404;
-            }
-            else
-            {
-                Response.StatusCode = 200;
-            }
-
+            Response.StatusCode = (Aircraft.Count < 1) ? 404 : 200;
             return Aircraft;
         }
 
+        [HttpPut("{id}")]
+        public async Task<string> UpdateAircraftData(
+            int id,
+            [FromForm] Fleet aircraft
+        )
+        {
+            try
+            {
+                aircraft.Id = id;
+                _context.Update(aircraft);
+                await _context.SaveChangesAsync();
+                return $"successfully replaced aircraft data - aircraft id :{id}";
+            }
+            catch (Exception)
+            {
+                return "failed replacing aircraft data";
+            }
+        }
 
+        [HttpPatch("{id}")]
+        public async Task<string> UpdateAircraft(
+            int id,
+            [FromForm] string? brand,
+            [FromForm] string? model,
+            [FromForm] byte? numberOfFirstClassSeats,
+            [FromForm] byte? numberOfBusinessClassSeats,
+            [FromForm] byte? numberOfEconomicClassSeats,
+            [FromForm] byte? numberOfServiceSeats,
+            [FromForm] string? registry
+        )
+        {
+            try
+            {
+                var Aircraft = _context.Fleets
+                    .Where(dbAircraft => dbAircraft.Id == id)
+                    .ToList();
+
+                Aircraft[0].Brand = (brand == null) ? Aircraft[0].Brand : brand;
+                Aircraft[0].Model = (model == null) ? Aircraft[0].Model : model;
+                Aircraft[0].NumberOfFirstClassSeats = (numberOfFirstClassSeats == null) ? Aircraft[0].NumberOfFirstClassSeats : numberOfFirstClassSeats;
+                Aircraft[0].NumberOfBusinessClassSeats = (numberOfBusinessClassSeats == null) ? Aircraft[0].NumberOfBusinessClassSeats : numberOfBusinessClassSeats;
+                Aircraft[0].NumberOfEconomicClassSeats = (numberOfEconomicClassSeats == null) ? Aircraft[0].NumberOfEconomicClassSeats : numberOfEconomicClassSeats;
+                Aircraft[0].NumberOfServiceSeats = (byte)((numberOfServiceSeats == null) ? Aircraft[0].NumberOfServiceSeats : numberOfServiceSeats);
+                Aircraft[0].Registry = (registry == null) ? Aircraft[0].Registry : registry;
+
+                _context.Update(Aircraft[0]);
+                await _context.SaveChangesAsync();
+
+
+                Response.StatusCode = 200;
+                return $"Successfully updated data for aircraft with id : {id}";
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+                return $"failed updating aircraft ID: {id}";
+            }
+        }
 
         [HttpDelete("{id}")]
         public async Task<string> DeleteAircraft(int id)

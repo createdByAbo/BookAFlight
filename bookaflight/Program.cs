@@ -1,4 +1,5 @@
-﻿using bookaflight.Model;
+﻿using System.Text.Json.Serialization;
+using bookaflight.Model;
 
 namespace BookAFlight;
 
@@ -11,7 +12,8 @@ public class Program
     // Add services to the container.
 
     builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddControllers().AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddScoped<devEnvDbContext>();

@@ -22,6 +22,15 @@ namespace bookaflight.Controllers
         {
             var Fleet = _context.Fleets
                 .ToList();
+
+            for (int i = 0; i < Fleet.Count; i+=1)
+            {
+                var flights = _context.Flights
+                    .Where(dbFlight => dbFlight.AircraftId == Fleet[i].Id)
+                    .ToList();
+                Fleet[i].Flights = flights;
+            }
+
             return Fleet;
         }
 
@@ -44,7 +53,7 @@ namespace bookaflight.Controllers
                 _context.Add(Aircraft);
                 await _context.SaveChangesAsync();
 
-                Response.StatusCode = 200;
+                Response.StatusCode = 201;
                 return $"Successfully added aircraft with registry : {aircraft.Registry}:";
             }
             catch (Exception)
@@ -61,6 +70,11 @@ namespace bookaflight.Controllers
                 .Where(dbAircraft => dbAircraft.Id == id)
                 .ToList();
 
+            var flights = _context.Flights
+                .Where(dbFlight => dbFlight.AircraftId == id)
+                .ToList();
+
+            Aircraft[0].Flights = flights;
             Response.StatusCode = (Aircraft.Count < 1) ? 404 : 200;
             return Aircraft;
         }

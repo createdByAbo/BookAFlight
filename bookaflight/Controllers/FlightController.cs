@@ -18,21 +18,78 @@ public class FlightController : ControllerBase
     }
 
     [HttpGet]
-    public List<Fleet> GetFlights()
+    public List<Flight> GetFlights()
     {
-        var Flights = _context.Fleets
+        var Flights = _context.Flights
             .ToList();
+
+        for (int i = 0; i < Flights.Count(); i += 1)
+        {
+            var aircraft = _context.Fleets
+                .Where(dbAircraft => dbAircraft.Id == Flights[i].AircraftId)
+                .ToList();
+            Flights[i].Aircraft = aircraft[0];
+        }
+
         return Flights;
     }
 
-    [HttpGet("{id}")]
-    public string GetFlightById(int id)
+    [HttpPost()]
+    public async Task<string> CreateFlight( [FromForm] Flight flight)
     {
-        return id.ToString();
+        try
+        {
+            var FlightInstance = new Flight()
+            {
+                AircraftId = flight.AircraftId,
+                StartCity = flight.StartCity,
+                StartAirport = flight.StartAirport,
+                StartDate = flight.StartDate,
+                EndCity = flight.EndCity,
+                EndAirport = flight.EndAirport,
+                EndDate = flight.EndDate,
+                BeetweenAproche = flight.BeetweenAproche,
+                BeetweenAprocheDate = flight.BeetweenAprocheDate,
+                FlightCode = flight.FlightCode,
+                FirstClassSeatPrice = flight.FirstClassSeatPrice,
+                BuisnessClassSeatPrice = flight.BuisnessClassSeatPrice,
+                EconomicClassSeatPrice = flight.EconomicClassSeatPrice,
+                RegistredBaggagePrice = flight.RegistredBaggagePrice,
+                NumberOfMaxPersonsWithRegistredBaggage = flight.NumberOfMaxPersonsWithRegistredBaggage
+            };
+
+            _context.Add(FlightInstance);
+            await _context.SaveChangesAsync();
+
+            Response.StatusCode = 201;
+            return $"Successfully added flight from {flight.StartCity} to {flight.EndCity}, {flight.StartDate} -> {flight.EndDate}, FLIGHTCODE : {flight.FlightCode}";
+        }
+        catch (Exception exc)
+        {
+
+            Response.StatusCode = 400;
+            return $"Failed adding flight to database {exc}";
+        }
     }
 
-    [HttpPost()]
-    public string CreateFlight()
+    [HttpGet("{id}")]
+    public List<Flight> GetFlightById(int id)
+    {
+        var Flights = _context.Flights
+            .Where(dbFlight => dbFlight.Id == id)
+            .ToList();
+
+        var aircraft = _context.Fleets
+            .Where(dbAircraft => dbAircraft.Id == Flights[0].AircraftId)
+            .ToList();
+
+        Flights[0].Aircraft = aircraft[0];
+
+        return Flights;
+    }
+
+    [HttpPatch("{id}")]
+    public string UpdateFlight(int id)
     {
         return "";
     }
@@ -41,11 +98,5 @@ public class FlightController : ControllerBase
     public string DeleteFlight(int id)
     {
         return id.ToString();  
-    }
-
-    [HttpPatch("{id}")]
-    public string UpdateFlight(int id)
-    {
-        return "";
     }
 }

@@ -2,11 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-using bookaflight.Model;
+using BookAFlight.Model;
 
-namespace bookaflight.Controllers
+namespace BookAFlight.Controllers
 {
     [ApiController]
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class FleetController : ControllerBase
     {
@@ -97,7 +98,7 @@ namespace bookaflight.Controllers
                 return "failed replacing aircraft data";
             }
         }
-
+        
         [HttpPatch("{id}")]
         public async Task<string> UpdateAircraft(
             int id,

@@ -2,11 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-using bookaflight.Model;
+using BookAFlight.Model;
 
 namespace BookAFlight.Controllers;
 
 [ApiController]
+[Produces("application/json")]
 [Route("api/[controller]s")]
 public class FlightController : ControllerBase
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace bookaflight.Model
+namespace BookAFlight.Model
 {
     public partial class Passenger
     {

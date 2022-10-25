@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-using BookAFlight.Model;
+using BookAFlight.Models;
+using BookAFlight.Context;
 
 namespace BookAFlight.Controllers;
 

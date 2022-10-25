@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using BookAFlight.Model;
+using BookAFlight.Models;
+using BookAFlight.Context;
 
 namespace BookAFlight;
 

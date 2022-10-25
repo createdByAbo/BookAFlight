@@ -14,6 +14,6 @@ namespace BookAFlight.Model
         public string Password { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
         public decimal PhoneNumber { get; set; }
-        public bool IsActivated { get; set; }
+        public string IsActivated { get; set; } = null!;
     }
 }

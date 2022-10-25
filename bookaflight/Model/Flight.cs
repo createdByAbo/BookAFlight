@@ -22,6 +22,6 @@ namespace BookAFlight.Model
         public decimal RegistredBaggagePrice { get; set; }
         public short NumberOfMaxPersonsWithRegistredBaggage { get; set; }
 
-        public virtual Fleet? Aircraft { get; set; } = null!;
+        public virtual Fleet Aircraft { get; set; } = null!;
     }
 }

@@ -20,13 +20,12 @@ namespace BookAFlight.Controllers
         }
 
         [HttpGet]
-        public string GetUsers()
+        public List<User> GetUsers()
         {
             var users = _context.Users
                 .ToList();
 
-            return users[0].Email;
+            return users;
         }
     }
 }
-

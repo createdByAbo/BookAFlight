@@ -10,7 +10,6 @@ namespace BookAFlight.Model
             Flights = new HashSet<Flight>();
         }
 
-
         public int Id { get; set; }
         public string Brand { get; set; } = null!;
         public string Model { get; set; } = null!;

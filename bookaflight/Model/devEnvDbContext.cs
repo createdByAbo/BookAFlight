@@ -10,7 +10,6 @@ namespace BookAFlight.Model
     {
         public devEnvDbContext()
         {
-           
         }
 
         public devEnvDbContext(DbContextOptions<devEnvDbContext> options)
@@ -22,8 +21,8 @@ namespace BookAFlight.Model
         public virtual DbSet<Flight> Flights { get; set; } = null!;
         public virtual DbSet<PassangerDatum> PassangerData { get; set; } = null!;
         public virtual DbSet<Passenger> Passengers { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
-        public virtual DbSet<UsersPermision> UsersPermisions { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -136,6 +135,13 @@ namespace BookAFlight.Model
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.DateOfBirth).HasColumnType("date");
@@ -146,6 +152,10 @@ namespace BookAFlight.Model
 
                 entity.Property(e => e.FirstName)
                     .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IsActivated)
+                    .HasMaxLength(5)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
@@ -163,11 +173,6 @@ namespace BookAFlight.Model
                 entity.Property(e => e.SurName)
                     .HasMaxLength(20)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<UsersPermision>(entity =>
-            {
-                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);

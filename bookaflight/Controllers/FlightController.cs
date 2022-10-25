@@ -57,7 +57,7 @@ public class FlightController : ControllerBase
                 EconomicClassSeatPrice = flight.EconomicClassSeatPrice,
                 RegistredBaggagePrice = flight.RegistredBaggagePrice,
                 NumberOfMaxPersonsWithRegistredBaggage = flight.NumberOfMaxPersonsWithRegistredBaggage
-            };
+            }; 
 
             _context.Add(FlightInstance);
             await _context.SaveChangesAsync();

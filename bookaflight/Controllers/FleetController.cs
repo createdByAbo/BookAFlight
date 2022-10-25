@@ -24,14 +24,6 @@ namespace BookAFlight.Controllers
             var Fleet = _context.Fleets
                 .ToList();
 
-            for (int i = 0; i < Fleet.Count; i+=1)
-            {
-                var flights = _context.Flights
-                    .Where(dbFlight => dbFlight.AircraftId == Fleet[i].Id)
-                    .ToList();
-                Fleet[i].Flights = flights;
-            }
-
             return Fleet;
         }
 
@@ -71,11 +63,6 @@ namespace BookAFlight.Controllers
                 .Where(dbAircraft => dbAircraft.Id == id)
                 .ToList();
 
-            var flights = _context.Flights
-                .Where(dbFlight => dbFlight.AircraftId == id)
-                .ToList();
-
-            Aircraft[0].Flights = flights;
             Response.StatusCode = (Aircraft.Count < 1) ? 404 : 200;
             return Aircraft;
         }

@@ -22,5 +22,11 @@
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="Microsoft.EntityFrameworkCore.Relational" />
     <None Remove="Newtonsoft.Json" />
+    <None Remove="DTOs\" />
+    <None Remove="Context\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+    <Folder Include="Context\" />
   </ItemGroup>
 </Project>

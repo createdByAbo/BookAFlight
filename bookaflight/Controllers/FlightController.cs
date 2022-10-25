@@ -24,14 +24,6 @@ public class FlightController : ControllerBase
         var Flights = _context.Flights
             .ToList();
 
-        for (int i = 0; i < Flights.Count(); i += 1)
-        {
-            var aircraft = _context.Fleets
-                .Where(dbAircraft => dbAircraft.Id == Flights[i].AircraftId)
-                .ToList();
-            Flights[i].Aircraft = aircraft[0];
-        }
-
         return Flights;
     }
 
@@ -79,12 +71,6 @@ public class FlightController : ControllerBase
         var Flights = _context.Flights
             .Where(dbFlight => dbFlight.Id == id)
             .ToList();
-
-        var aircraft = _context.Fleets
-            .Where(dbAircraft => dbAircraft.Id == Flights[0].AircraftId)
-            .ToList();
-
-        Flights[0].Aircraft = aircraft[0];
 
         return Flights;
     }

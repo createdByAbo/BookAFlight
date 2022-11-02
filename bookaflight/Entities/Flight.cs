@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BookAFlight.Models
+namespace BookAFlight.Entities
 {
     public partial class Flight
     {

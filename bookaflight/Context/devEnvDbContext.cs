@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
-using BookAFlight.Models;
+using BookAFlight.Entities;
 
 namespace BookAFlight.Context
 {

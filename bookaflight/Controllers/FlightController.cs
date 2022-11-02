@@ -62,7 +62,7 @@ public class FlightController : ControllerBase
         {
 
             Response.StatusCode = 400;
-            return $"Failed adding flight to database {exc}";
+            return $"Failed adding flight to database {exc.Message}";
         }
     }
 
@@ -83,8 +83,22 @@ public class FlightController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public string DeleteFlight(int id)
+    public async Task<string> DeleteFlight(int id)
     {
-        return id.ToString();  
+        try
+        {
+            var Flights = new Flight { Id = id };
+            _context.Remove(Flights);
+
+            await _context.SaveChangesAsync();
+
+            Response.StatusCode = 200;
+            return $"Successfully removed from database Flight where id : {id}";
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            Response.StatusCode = 404;
+            return $"Not found Aircraft with id {id}";
+        }
     }
 }

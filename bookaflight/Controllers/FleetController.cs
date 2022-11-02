@@ -145,7 +145,7 @@ namespace BookAFlight.Controllers
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
             {
-                Response.StatusCode = 412;
+                Response.StatusCode = 404;
                 return $"Not found Aircraft with id {id}";
             }
         }

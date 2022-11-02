@@ -30,6 +30,13 @@ namespace BookAFlight.Controllers
             return users;
         }
 
-
+        [HttpGet("{id}")]
+        public User GetUsetById(int id)
+        {
+            var user = _context.Users
+                .Where(dbUser => dbUser.Id == id)
+                .First();
+            return user;
+        }
     }
 }

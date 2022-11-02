@@ -14,7 +14,7 @@ namespace BookAFlight.Controllers
     [Produces("application/json")]
     [Route("api/[controller]s")]
     public class UserController : ControllerBase
-    {
+    { 
         private readonly devEnvDbContext _context;
 
         public UserController(devEnvDbContext context) 
@@ -98,6 +98,30 @@ namespace BookAFlight.Controllers
             {
                 Response.StatusCode = 404;
                 return $"Not found User with id {id}";
+            }
+        }
+
+        [HttpPost("authenticate")]
+        public string Login( [FromForm] string mail, [FromForm] string password)
+        {
+            try
+            {
+                var User = _context.Users
+                    .Where(obj => obj.Email == mail)
+                    .First();
+
+                if (User.IsActivated == "1" && BCrypt.Net.BCrypt.Verify(password, User.Password) == true)
+                {
+                    return "ok";
+                }
+                else
+                {
+                    return "wrong password or user not activated";
+                }
+            }
+            catch (Exception exc)
+            {
+                return "user not found";
             }
         }
     }

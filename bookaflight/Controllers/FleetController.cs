@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-using BookAFlight.Models;
+using BookAFlight.Entities;
 using BookAFlight.Context;
 
 namespace BookAFlight.Controllers
@@ -141,7 +141,7 @@ namespace BookAFlight.Controllers
                 await _context.SaveChangesAsync();
 
                 Response.StatusCode = 200;
-                return $"Successfully removed from database aircraft where id : {id}";
+                return $"Successfully removed from database aircraft with id : {id}";
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
             {

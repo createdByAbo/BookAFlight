@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-using BookAFlight.Models;
+using BookAFlight.Entities;
 using BookAFlight.Context;
 
 namespace BookAFlight.Controllers;
@@ -33,7 +33,7 @@ public class FlightController : ControllerBase
     {
         try
         {
-            var FlightInstance = new Flight()
+            var NewFlight = new Flight()
             {
                 AircraftId = flight.AircraftId,
                 StartCity = flight.StartCity,
@@ -52,7 +52,7 @@ public class FlightController : ControllerBase
                 NumberOfMaxPersonsWithRegistredBaggage = flight.NumberOfMaxPersonsWithRegistredBaggage
             }; 
 
-            _context.Add(FlightInstance);
+            _context.Add(NewFlight);
             await _context.SaveChangesAsync();
 
             Response.StatusCode = 201;

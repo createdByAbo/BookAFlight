@@ -12,7 +12,7 @@
     "bookaflight": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:52708",
+      "applicationUrl": "http://localhost:32105",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

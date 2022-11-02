@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using BCrypt.Net;
 
-using BookAFlight.Models;
+using BookAFlight.Entities;
 using BookAFlight.Context;
 
 using System;
@@ -21,6 +22,38 @@ namespace BookAFlight.Controllers
             _context = context;
         }
 
+        [HttpPost]
+        public async Task<string> CreateUser( [FromForm] User user )
+        {
+            try
+            {
+                var NewUser = new User()
+                {
+                    FirstName = user.FirstName,
+                    SecondName = user.SecondName,
+                    SurName = user.SurName,
+                    Email = user.Email,
+                    PeselNumber = user.PeselNumber,
+                    Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+                    DateOfBirth = user.DateOfBirth,
+                    PhoneNumber = user.PhoneNumber,
+                    IsActivated = "0"
+                };
+
+                _context.Add(NewUser);
+                await _context.SaveChangesAsync();
+
+                Response.StatusCode = 201;
+                return "Ok";
+            }
+            catch (Exception exc)
+            {
+                Response.StatusCode = 400;
+                return $"Failed adding user to database {exc}";
+            }
+        }
+
+
         [HttpGet]
         public List<User> GetUsers()
         {
@@ -33,10 +66,39 @@ namespace BookAFlight.Controllers
         [HttpGet("{id}")]
         public User GetUsetById(int id)
         {
-            var user = _context.Users
-                .Where(dbUser => dbUser.Id == id)
-                .First();
-            return user;
+            try
+            {
+                var user = _context.Users
+                    .Where(dbUser => dbUser.Id == id)
+                    .First();
+
+                Response.StatusCode = 200;
+                return user;
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 404;
+                return new User();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<string> RemoveUserById(int id)
+        {
+            try
+            {
+                var NewUser = new User() { Id = id };
+
+                _context.Remove(NewUser);
+                await _context.SaveChangesAsync();
+                Response.StatusCode = 200;
+                return $"Successfully removed from database user with id : {id}";
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
+            {
+                Response.StatusCode = 404;
+                return $"Not found User with id {id}";
+            }
         }
     }
 }

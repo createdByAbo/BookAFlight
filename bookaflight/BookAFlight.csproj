@@ -33,9 +33,11 @@
     <None Remove="Microsoft.EntityFrameworkCore.Tools" />
     <None Remove="Models\DTOs\" />
     <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <None Remove="JWT\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Context\" />
     <Folder Include="Models\DTOs\" />
+    <Folder Include="JWT\" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 using BookAFlight.Entities;
 using BookAFlight.Context;
+using BookAFlight.JWT;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BookAFlight;
 
@@ -8,33 +11,55 @@ public class Program
 {
     public static void Main(string[] args)
     {
-    var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
+        var authenticationSettings = new AuthSettings();
+        
+        // Add services to the container.
 
-    // Add services to the container.
+        builder.Services.AddControllers();
+        builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+        builder.Services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<devEnvDbContext>();
 
-    builder.Services.AddControllers();
-    builder.Services.AddControllers().AddJsonOptions(x =>
-        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddScoped<devEnvDbContext>();
+        builder.Services.AddSingleton(authenticationSettings);
 
-    var app = builder.Build();
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = "Bearer";
+            options.DefaultScheme = "Bearer";
+            options.DefaultChallengeScheme = "Bearer";
+        }).AddJwtBearer(config =>
+        {
+            config.RequireHttpsMetadata = false;
+            config.SaveToken = true;
+            config.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidIssuer = authenticationSettings.JwtIssuer,
+                ValidAudience = authenticationSettings.JwtIssuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+            };
+        });
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+        var app = builder.Build();
 
-    app.UseHttpsRedirection();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
-     app.UseAuthorization();
+        app.UseHttpsRedirection();
 
-    app.MapControllers();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
-    app.Run();
+        app.MapControllers();
+
+        app.Run();
     }
 }
 

@@ -7,6 +7,13 @@ using BookAFlight.Entities;
 using BookAFlight.Context;
 
 using System;
+using BookAFlight.JWT;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookAFlight.Controllers
 {
@@ -16,10 +23,12 @@ namespace BookAFlight.Controllers
     public class UserController : ControllerBase
     { 
         private readonly devEnvDbContext _context;
+        private readonly AuthSettings _authenticationSettings;
 
-        public UserController(devEnvDbContext context) 
+        public UserController(devEnvDbContext context, AuthSettings AuthenticationSettings) 
         {
             _context = context;
+            _authenticationSettings = AuthenticationSettings;
         }
 
         [HttpPost]
@@ -31,13 +40,12 @@ namespace BookAFlight.Controllers
                 {
                     FirstName = user.FirstName,
                     SecondName = user.SecondName,
-                    SurName = user.SurName,
+                    LastName = user.LastName,
                     Email = user.Email,
                     PeselNumber = user.PeselNumber,
                     Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
                     DateOfBirth = user.DateOfBirth,
                     PhoneNumber = user.PhoneNumber,
-                    IsActivated = "0"
                 };
 
                 _context.Add(NewUser);
@@ -53,10 +61,9 @@ namespace BookAFlight.Controllers
             }
         }
 
-
         [HttpGet]
-        public List<User> GetUsers()
-        {
+        [Authorize(Roles = "Admin")]
+        public List<User> GetUsers()        {
             var users = _context.Users
                 .ToList();
 
@@ -110,18 +117,31 @@ namespace BookAFlight.Controllers
                     .Where(obj => obj.Email == mail)
                     .First();
 
-                if (User.IsActivated == "1" && BCrypt.Net.BCrypt.Verify(password, User.Password) == true)
+                if (User.IsActivated != true) { return "user not activated"; }
+                if (BCrypt.Net.BCrypt.Verify(password, User.Password) == false ) { return "wrong password"; }
+
+                List<Claim> claims = new List<Claim>
                 {
-                    return "ok";
-                }
-                else
-                {
-                    return "wrong password or user not activated";
-                }
+                    new Claim(ClaimTypes.NameIdentifier, User.Id.ToString()),
+                    new Claim(ClaimTypes.Name, $"{User.FirstName} {User.LastName}"),
+                    new Claim(ClaimTypes.Email, User.Email),
+                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim(ClaimTypes.DateOfBirth, User.DateOfBirth.ToString()),
+                };
+
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+                    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    var expires = DateTime.Now.AddDays(_authenticationSettings.ExpireDays);
+
+                    var token = new JwtSecurityToken(_authenticationSettings.JwtIssuer, _authenticationSettings.JwtIssuer, claims, expires: expires, signingCredentials: credentials);
+                    var tokenHandler = new JwtSecurityTokenHandler();
+
+                    return tokenHandler.WriteToken(token);
+
             }
             catch (Exception exc)
             {
-                return "user not found";
+                return $"user not found {exc}";
             }
         }
     }

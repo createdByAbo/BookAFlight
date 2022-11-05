@@ -17,19 +17,18 @@ namespace BookAFlight.Services
     {
         void RegisterUser(RegisterUserDTO registerDto);
         public string CreateToken(LoginDTO loginDto);
-        int GetUserRoleIdByUsername(string username);
+        string GetUserRoleByUsername(string username);
+        bool UsernameAndPasswordCheck(LoginDTO loginDto);
     }
 
     public class UserService : IUserService
     {
         private readonly devEnvDbContext _context;
         private readonly AuthSettings _authenticationSettings;
-        private readonly IRoleService _roleService;
 
-        public UserService(devEnvDbContext context, AuthSettings authenticationSettings, IRoleService roleService)
+        public UserService(devEnvDbContext context, AuthSettings authenticationSettings)
         {
             _context = context;
-            _roleService = roleService;
             _authenticationSettings = authenticationSettings;
         }
 
@@ -52,12 +51,23 @@ namespace BookAFlight.Services
             _context.SaveChanges();
         }
 
-        public int GetUserRoleIdByUsername(string username)
+        public bool UsernameAndPasswordCheck(LoginDTO loginDto)
         {
-            var id = from user in _context.Users
+            var passwordHash = from user in _context.Users
+                       where user.IsActivated == true
+                       where user.Username == loginDto.Username
+                       select user.Password;
+
+            if (passwordHash.Count() == 0) { return false; };
+            return BCrypt.Net.BCrypt.Verify(loginDto.Password, passwordHash.First());
+        }
+
+        public string GetUserRoleByUsername(string username)
+        {
+            var roleId = from user in _context.Users
                      where user.Username == username
-                     select user.RoleId;
-            return id.First();
+                     select user.Role;
+            return roleId.First().Name;
         }
 
         public string CreateToken(LoginDTO loginDto)
@@ -65,7 +75,7 @@ namespace BookAFlight.Services
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, loginDto.Username.ToString()),
-                new Claim(ClaimTypes.Role, _roleService.GetRoleByUsername(loginDto.Username)),
+                new Claim(ClaimTypes.Role, GetUserRoleByUsername(loginDto.Username)),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));

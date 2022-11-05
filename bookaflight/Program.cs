@@ -23,9 +23,8 @@ public class Program
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddSingleton<devEnvDbContext>();
         builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<IRoleService, RoleService>();
-        builder.Services.AddScoped<devEnvDbContext>();
 
         builder.Services.AddSingleton(authenticationSettings);
 

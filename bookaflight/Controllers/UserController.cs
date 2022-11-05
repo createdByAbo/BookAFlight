@@ -41,7 +41,8 @@ namespace BookAFlight.Controllers
         [HttpPost("login")]
         public ActionResult Login( [FromForm] LoginDTO loginDto )
         {
-            return Ok();
+            if (_userService.UsernameAndPasswordCheck(loginDto)) { return Ok(_userService.CreateToken(loginDto)); }
+            else { return BadRequest(); }
         }
     }
 }

@@ -1,13 +1,17 @@
 ﻿using System;
-namespace bookaflight.Models.DTOs
+namespace BookAFlight.Models.DTOs
 {
     public class RegisterUserDTO
     {
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? Nationality { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public int RoleId { get; set; } = 1;
+        public string Email { get; set; } = null!;
+        public string Password { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string? SecondName { get; set; }
+        public string Username { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string PeselNumber { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
     }
 }
 

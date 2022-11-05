@@ -34,10 +34,12 @@
     <None Remove="Models\DTOs\" />
     <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <None Remove="JWT\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Context\" />
     <Folder Include="Models\DTOs\" />
     <Folder Include="JWT\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

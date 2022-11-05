@@ -4,6 +4,7 @@ using BookAFlight.Context;
 using BookAFlight.JWT;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BookAFlight.Services;
 
 namespace BookAFlight;
 
@@ -22,6 +23,8 @@ public class Program
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IRoleService, RoleService>();
         builder.Services.AddScoped<devEnvDbContext>();
 
         builder.Services.AddSingleton(authenticationSettings);

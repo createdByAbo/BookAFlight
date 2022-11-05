@@ -44,5 +44,14 @@ namespace BookAFlight.Controllers
             if (_userService.UsernameAndPasswordCheck(loginDto)) { return Ok(_userService.CreateToken(loginDto)); }
             else { return BadRequest(); }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public ActionResult RemoveUserById(int id)
+        {
+           var user = new User() { Id = id };
+           if (_userService.RemoveUserById(user)) { return Ok($"succesfully deleted user with id: {id} from database"); }
+           else { return BadRequest(); };
+        }
     }
 }

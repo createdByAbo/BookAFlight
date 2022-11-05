@@ -19,6 +19,7 @@ namespace BookAFlight.Services
         public string CreateToken(LoginDTO loginDto);
         string GetUserRoleByUsername(string username);
         bool UsernameAndPasswordCheck(LoginDTO loginDto);
+        bool RemoveUserById(User user);
     }
 
     public class UserService : IUserService
@@ -68,6 +69,20 @@ namespace BookAFlight.Services
                      where user.Username == username
                      select user.Role;
             return roleId.First().Name;
+        }
+
+        public bool RemoveUserById(User user)
+        {
+            try
+            {
+                _context.Remove(user);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public string CreateToken(LoginDTO loginDto)

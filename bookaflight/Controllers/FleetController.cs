@@ -44,23 +44,22 @@ namespace BookAFlight.Controllers
             return Ok(_fleetService.GetAircraftById(id));
         }
 
-        [HttpGet("/registration")]
-        public ActionResult GetAircraftByRegistration([FromForm] string registration)
+        [HttpGet("registration/{registration}")]
+        public ActionResult GetAircraftByRegistration(string registration)
         {
             return Ok(_fleetService.GetAircraftByRegistration(registration));
         }
 
-        [AllowAnonymous]
         [HttpGet("ids")]
         public ActionResult GetAircraftsByIds( [FromForm] string ids)
         {
             return Ok(_fleetService.GetAircraftsByIds(JsonConvert.DeserializeObject<List<int>>(ids).ToList()));
         }
 
-        [HttpGet("registration")]
-        public ActionResult GetAircraftsByRegistrations([FromForm] List<string> registrations)
+        [HttpGet("registrations")]
+        public ActionResult GetAircraftsByRegistrations([FromForm] string registrations)
         {
-            return Ok(_fleetService.GetAircraftsByRegistrations(registrations));
+            return Ok(_fleetService.GetAircraftsByRegistrations(JsonConvert.DeserializeObject<List<string>>(registrations).ToList()));
         }
     }
 }

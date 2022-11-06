@@ -16,6 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
 
 namespace BookAFlight.Controllers
 {
@@ -36,6 +37,16 @@ namespace BookAFlight.Controllers
         {
             _userService.RegisterUser(registerDto);
             return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete("deleteAccount")]
+        public ActionResult DeleteAccount( [FromHeader] string Authorization )
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var username = handler.ReadJwtToken(Authorization.Replace("Bearer ", "")).Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+            if (_userService.RemoveUserByUsername(username)) { return Ok($"succesfully deleted user with username: {username} from database"); }
+            else { return BadRequest(); }
         }
 
         [HttpPost("login")]

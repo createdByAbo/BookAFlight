@@ -20,6 +20,7 @@ namespace BookAFlight.Services
         string GetUserRoleByUsername(string username);
         bool UsernameAndPasswordCheck(LoginDTO loginDto);
         bool RemoveUserById(User user);
+        bool RemoveUserByUsername(string username);
     }
 
     public class UserService : IUserService
@@ -75,6 +76,29 @@ namespace BookAFlight.Services
         {
             try
             {
+                _context.Remove(user);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private int GetIdByUsername(string username)
+        {
+            var id = from user in _context.Users
+                     where user.Username == username
+                     select user.Id;
+            return id.FirstOrDefault();
+        }
+
+        public bool RemoveUserByUsername(string username)
+        {
+            try
+            {
+                var user = new User() { Id = GetIdByUsername(username) };
                 _context.Remove(user);
                 _context.SaveChanges();
                 return true;

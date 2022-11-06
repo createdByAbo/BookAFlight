@@ -25,6 +25,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddSingleton<devEnvDbContext>();
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IFleetService, FleetService>();
 
         builder.Services.AddSingleton(authenticationSettings);
 

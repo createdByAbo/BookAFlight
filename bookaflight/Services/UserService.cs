@@ -16,7 +16,7 @@ namespace BookAFlight.Services
     public interface IUserService
     {
         void RegisterUser(RegisterUserDTO registerDto);
-        public string CreateToken(LoginDTO loginDto);
+        string CreateToken(LoginDTO loginDto);
         string GetUserRoleByUsername(string username);
         bool UsernameAndPasswordCheck(LoginDTO loginDto);
         bool RemoveUserById(User user);

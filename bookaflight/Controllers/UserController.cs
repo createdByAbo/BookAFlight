@@ -41,10 +41,10 @@ namespace BookAFlight.Controllers
 
         [Authorize]
         [HttpDelete("deleteAccount")]
-        public ActionResult DeleteAccount( [FromHeader] string Authorization )
+        public ActionResult DeleteAccount( [FromHeader] string authorization )
         {
             var handler = new JwtSecurityTokenHandler();
-            var username = handler.ReadJwtToken(Authorization.Replace("Bearer ", "")).Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+            var username = handler.ReadJwtToken(authorization.Replace("Bearer ", "")).Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
             if (_userService.RemoveUserByUsername(username)) { return Ok($"succesfully deleted user with username: {username} from database"); }
             else { return BadRequest(); }
         }
@@ -52,8 +52,15 @@ namespace BookAFlight.Controllers
         [HttpPost("login")]
         public ActionResult Login( [FromForm] LoginDTO loginDto )
         {
-            if (_userService.UsernameAndPasswordCheck(loginDto)) { return Ok(_userService.CreateToken(loginDto)); }
-            else { return BadRequest(); }
+            try
+            {
+                _userService.UsernameAndPasswordCheck(loginDto);
+                return Ok(_userService.CreateToken(loginDto));
+            }
+            catch (Exceptions.NotFoundException exc)
+            {
+                return BadRequest(exc.Message);
+            }
         }
 
         [Authorize(Roles = "Admin")]

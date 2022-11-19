@@ -1,11 +1,8 @@
-﻿using System;
-
-using BookAFlight.Context;
+﻿using BookAFlight.Context;
 using BookAFlight.JWT;
 using BookAFlight.Models.DTOs;
 using BookAFlight.Entities;
 
-using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -36,7 +33,7 @@ namespace BookAFlight.Services
 
         public void RegisterUser(RegisterUserDTO registerDto)
         {
-            var NewUser = new User()
+            var newUser = new User()
             {
                 Email = registerDto.Email,
                 DateOfBirth = registerDto.DateOfBirth,
@@ -49,7 +46,7 @@ namespace BookAFlight.Services
                 PhoneNumber = registerDto.PhoneNumber,
             };
 
-            _context.Users.Add(NewUser);
+            _context.Users.Add(newUser);
             _context.SaveChanges();
         }
 
@@ -60,7 +57,7 @@ namespace BookAFlight.Services
                        where user.Username == loginDto.Username
                        select user.Password;
 
-            if (passwordHash.Count() == 0) { return false; };
+            if (passwordHash.Count() != 1) { throw new Exceptions.NotFoundException("User not found, or not activated"); };
             return BCrypt.Net.BCrypt.Verify(loginDto.Password, passwordHash.First());
         }
 
@@ -113,7 +110,7 @@ namespace BookAFlight.Services
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, loginDto.Username.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, loginDto.Username),
                 new Claim(ClaimTypes.Role, GetUserRoleByUsername(loginDto.Username)),
             };
 

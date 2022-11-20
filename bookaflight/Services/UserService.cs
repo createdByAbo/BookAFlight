@@ -13,7 +13,7 @@ namespace BookAFlight.Services
     public interface IUserService
     {
         void RegisterUser(RegisterUserDTO registerDto);
-        string CreateToken(LoginDTO loginDto);
+        List<string> CreateToken(LoginDTO loginDto);
         string GetUserRoleByUsername(string username);
         bool UsernameAndPasswordCheck(LoginDTO loginDto);
         bool RemoveUserById(User user);
@@ -106,8 +106,9 @@ namespace BookAFlight.Services
             }
         }
 
-        public string CreateToken(LoginDTO loginDto)
+        public List<string> CreateToken(LoginDTO loginDto)
         {
+            List<string> returnData = new List<string>();
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, loginDto.Username),
@@ -121,7 +122,9 @@ namespace BookAFlight.Services
             var token = new JwtSecurityToken(_authenticationSettings.JwtIssuer, _authenticationSettings.JwtIssuer, claims, expires: expires, signingCredentials: credentials);
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            return tokenHandler.WriteToken(token);
+            returnData.Add(tokenHandler.WriteToken(token));
+            returnData.Add(expires.ToShortTimeString());
+            return returnData;
         }
     }
 }

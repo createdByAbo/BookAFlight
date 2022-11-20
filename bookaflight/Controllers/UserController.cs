@@ -1,22 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using BCrypt.Net;
 
 using BookAFlight.Entities;
-using BookAFlight.Context;
 using BookAFlight.Models.DTOs;
+using BookAFlight.Models;
 using BookAFlight.Services;
 
-using System;
-using BookAFlight.JWT;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BookAFlight.Controllers
 {
@@ -55,7 +48,8 @@ namespace BookAFlight.Controllers
             try
             {
                 _userService.UsernameAndPasswordCheck(loginDto);
-                return Ok(_userService.CreateToken(loginDto));
+                JwtReturnModel returnData = new JwtReturnModel(_userService.CreateToken(loginDto)[0], _userService.CreateToken(loginDto)[1]);
+                return Ok(JsonConvert.SerializeObject(returnData));
             }
             catch (Exceptions.NotFoundException exc)
             {
@@ -69,7 +63,7 @@ namespace BookAFlight.Controllers
         {
            var user = new User() { Id = id };
            if (_userService.RemoveUserById(user)) { return Ok($"succesfully deleted user with id: {id} from database"); }
-           else { return BadRequest(); };
+           else { return BadRequest('s'); };
         }
     }
 }

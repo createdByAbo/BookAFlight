@@ -10,9 +10,11 @@ namespace BookAFlight.Entities
         public string StartCity { get; set; } = null!;
         public string StartAirport { get; set; } = null!;
         public DateTime StartDate { get; set; }
+        public DateTime StartDateOnly { get; set; }
         public string EndCity { get; set; } = null!;
         public string EndAirport { get; set; } = null!;
         public DateTime EndDate { get; set; }
+        public DateTime EndDateOnly { get; set; }
         public string? BeetweenAproche { get; set; }
         public DateTime? BeetweenAprocheDate { get; set; }
         public string FlightCode { get; set; } = null!;

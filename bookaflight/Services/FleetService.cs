@@ -1,10 +1,5 @@
-﻿using System;
-
-using BookAFlight.Context;
-using BookAFlight.JWT;
-using BookAFlight.Models.DTOs;
+﻿using BookAFlight.Context;
 using BookAFlight.Entities;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace BookAFlight.Services
@@ -29,7 +24,7 @@ namespace BookAFlight.Services
         Fleet UpdateAircraftData(Fleet newAircraftData);
 
         //HTTP put
-        Fleet ReplaceAircraftData(Fleet AircrafrData);
+        Fleet ReplaceAircraftData(Fleet AircraftData);
     }
 
     public class FleetService : IFleetService
@@ -103,7 +98,7 @@ namespace BookAFlight.Services
             return returnedAircrafts.ToList();
         }
 
-        public Fleet ReplaceAircraftData(Fleet AircrafrData)
+        public Fleet ReplaceAircraftData(Fleet AircrftData)
         {
             throw new NotImplementedException();
         }

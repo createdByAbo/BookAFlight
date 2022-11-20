@@ -1,20 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using BCrypt.Net;
 
-using BookAFlight.Entities;
-using BookAFlight.Context;
-using BookAFlight.Models.DTOs;
+using Newtonsoft.Json;
+
 using BookAFlight.Services;
 
-using System;
-using BookAFlight.JWT;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BookAFlight.Controllers

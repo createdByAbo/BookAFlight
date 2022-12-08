@@ -49,7 +49,7 @@ namespace BookAFlight.Controllers
             {
                 _userService.UsernameAndPasswordCheck(loginDto);
                 JwtReturnModel returnData = new JwtReturnModel(_userService.CreateToken(loginDto)[0], _userService.CreateToken(loginDto)[1]);
-                return Ok(JsonConvert.SerializeObject(returnData));
+                return Ok(returnData);
             }
             catch (Exceptions.NotFoundException exc)
             {

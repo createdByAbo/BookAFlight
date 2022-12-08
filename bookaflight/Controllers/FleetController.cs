@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookAFlight.Entities;
+using BookAFlight.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
 
@@ -31,6 +33,29 @@ namespace BookAFlight.Controllers
         public ActionResult GetAircraftById(int id)
         {
             return Ok(_fleetService.GetAircraftById(id));
+        }
+
+        [HttpDelete("id/{id}")]
+        public ActionResult DeleteAircraftById(int id)
+        {
+            try
+            {
+                var aircraft = new Fleet() { Id = id };
+                _fleetService.DeleteAircraftById(aircraft);
+                return Ok($"Successfully removed aircraft with id {aircraft.Id}");
+            }
+            catch (DbConflictException exc)
+            {
+                return BadRequest(exc.Message);
+            }
+            catch (NotFoundException exc)
+            {
+                return NotFound(exc.Message);
+            }
+            catch (ApplicationException)
+            {
+                return Problem();
+            }
         }
 
         [HttpGet("registration/{registration}")]

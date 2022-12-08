@@ -1,5 +1,8 @@
 ﻿using BookAFlight.Context;
 using BookAFlight.Entities;
+using BookAFlight.Exceptions;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BookAFlight.Services
@@ -17,7 +20,7 @@ namespace BookAFlight.Services
         void AddAircraft(Fleet aircraft);
 
         //HTTP delete
-        void DeleteAircraftById(int id);
+        void DeleteAircraftById(Fleet aircraft);
         void DeleteAircraftsByIds(List<int> ids);
 
         //HTTP patch
@@ -42,11 +45,25 @@ namespace BookAFlight.Services
             _context.SaveChanges();
         }
 
-        public void DeleteAircraftById(int id)
+        public void DeleteAircraftById(Fleet aircraft)
         {
-            var aircraftId = new Fleet() { Id = id };
-            _context.Fleets.Remove(aircraftId);
-            _context.SaveChanges();
+            try
+            {
+                _context.Remove(aircraft);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new NotFoundException($"airctaft with id: {aircraft.Id} not found");
+            }
+            catch (DbUpdateException)
+            {
+                throw new DbConflictException($"aircraft with id: {aircraft.Id} has already flights");
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException();
+            }
         }
 
         public void DeleteAircraftsByIds(List<int> ids)

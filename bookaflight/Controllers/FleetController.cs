@@ -1,5 +1,6 @@
 ﻿using BookAFlight.Entities;
 using BookAFlight.Exceptions;
+using BookAFlight.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace BookAFlight.Controllers
 {
     [ApiController]
     [Produces("application/json")]
-    [Authorize(Roles = "Mechanic")]
+    //[Authorize(Roles = "Mechanic")]
     [Route("api/[controller]")]
     public class FleetController : ControllerBase
     {
@@ -74,6 +75,20 @@ namespace BookAFlight.Controllers
         public ActionResult GetAircraftsByRegistrations([FromForm] string registrations)
         {
             return Ok(_fleetService.GetAircraftsByRegistrations(JsonConvert.DeserializeObject<List<string>>(registrations).ToList()));
+        }
+
+        [HttpPut("replaceAircraftData")]
+        public ActionResult ReplaceAircraftDataById([FromForm] AircraftUpdateDTO newData)
+        {
+            try
+            {
+                return Ok(_fleetService.ReplaceAircraftData(newData));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

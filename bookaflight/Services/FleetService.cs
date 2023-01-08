@@ -1,7 +1,8 @@
 ﻿using BookAFlight.Context;
 using BookAFlight.Entities;
 using BookAFlight.Exceptions;
-using Microsoft.Data.SqlClient;
+using BookAFlight.Models;
+using BookAFlight.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -27,7 +28,7 @@ namespace BookAFlight.Services
         Fleet UpdateAircraftData(Fleet newAircraftData);
 
         //HTTP put
-        Fleet ReplaceAircraftData(Fleet AircraftData);
+        Fleet ReplaceAircraftData(AircraftUpdateDTO aircraftData);
     }
 
     public class FleetService : IFleetService
@@ -60,7 +61,7 @@ namespace BookAFlight.Services
             {
                 throw new DbConflictException($"aircraft with id: {aircraft.Id} has already flights");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new ApplicationException();
             }
@@ -68,7 +69,26 @@ namespace BookAFlight.Services
 
         public void DeleteAircraftsByIds(List<int> ids)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i <= ids.Count; i=+1)
+            {
+                try
+                {
+                    _context.Remove(ids[i]);
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw new NotFoundException($"airctaft with id: {ids[i]} not found");
+                }
+                catch (DbUpdateException)
+                {
+                    throw new DbConflictException($"aircraft with id: {ids[i]} has already flights");
+                }
+                catch (Exception)
+                {
+                    throw new ApplicationException();
+                }
+            }
         }
 
         public Fleet GetAircraftById(int id)
@@ -115,9 +135,21 @@ namespace BookAFlight.Services
             return returnedAircrafts.ToList();
         }
 
-        public Fleet ReplaceAircraftData(Fleet AircrftData)
+        public Fleet ReplaceAircraftData(AircraftUpdateDTO aircraftData)
         {
-            throw new NotImplementedException();
+            //var Aircraft = _context.Fleets
+              //  .Where(aircraft => aircraft.Id == aircraftData.Id)
+                //.ToList();
+            //if (Aircraft == null)
+            //{
+              //  throw new NotFoundException($"Not Found Aircraft with id: {aircraftData.Id}");
+            //}
+
+            _context.Fleets.Update(AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData));
+
+            //Aircraft[0] = AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData);
+            _context.SaveChangesAsync();
+            return AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData);
         }
 
         public Fleet UpdateAircraftData(Fleet newAircraftData)

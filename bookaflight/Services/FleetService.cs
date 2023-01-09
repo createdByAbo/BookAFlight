@@ -137,14 +137,6 @@ namespace BookAFlight.Services
 
         public Fleet ReplaceAircraftData(AircraftUpdateDTO aircraftData)
         {
-            //var Aircraft = _context.Fleets
-              //  .Where(aircraft => aircraft.Id == aircraftData.Id)
-                //.ToList();
-            //if (Aircraft == null)
-            //{
-              //  throw new NotFoundException($"Not Found Aircraft with id: {aircraftData.Id}");
-            //}
-
             _context.Fleets.Update(AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData));
 
             //Aircraft[0] = AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData);

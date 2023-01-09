@@ -25,7 +25,7 @@ namespace BookAFlight.Services
         void DeleteAircraftsByIds(List<int> ids);
 
         //HTTP patch
-        Fleet UpdateAircraftData(Fleet newAircraftData);
+        Fleet UpdateAircraftData(AircraftUpdateDTO aircraftData);
 
         //HTTP put
         Fleet ReplaceAircraftData(AircraftUpdateDTO aircraftData);
@@ -139,14 +139,24 @@ namespace BookAFlight.Services
         {
             _context.Fleets.Update(AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData));
 
-            //Aircraft[0] = AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData);
             _context.SaveChangesAsync();
             return AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData);
         }
 
-        public Fleet UpdateAircraftData(Fleet newAircraftData)
+        public Fleet UpdateAircraftData(AircraftUpdateDTO aircraftData)
         {
-            throw new NotImplementedException();
+            var aircraft = _context.Fleets.Find(aircraftData.Id);
+            if (aircraft == null) { throw new NotFoundException("Not found aircraft to update"); }
+
+            aircraft.Brand = aircraftData.Brand != null ? aircraftData.Brand : aircraft.Brand;
+            aircraft.Model = aircraftData.Model != null ? aircraftData.Model : aircraft.Model;
+            aircraft.Registry = aircraftData.Registry != null ? aircraftData.Registry : aircraft.Registry;
+            aircraft.NumberOfFirstClassSeats = aircraftData.NumberOfFirstClassSeats != null ? aircraftData.NumberOfFirstClassSeats : aircraft.NumberOfFirstClassSeats;
+            aircraft.NumberOfBusinessClassSeats = aircraftData.NumberOfBusinessClassSeats != null ? aircraftData.NumberOfBusinessClassSeats : aircraft.NumberOfBusinessClassSeats;
+            aircraft.NumberOfEconomicClassSeats = aircraftData.NumberOfEconomicClassSeats != null ? aircraftData.NumberOfEconomicClassSeats : aircraft.NumberOfEconomicClassSeats;
+            aircraft.NumberOfServiceSeats = aircraftData.NumberOfServiceSeats != null ? aircraftData.NumberOfServiceSeats : aircraft.NumberOfServiceSeats;
+
+            return aircraft;
         }
     }
 }

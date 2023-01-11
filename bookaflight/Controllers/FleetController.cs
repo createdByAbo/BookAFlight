@@ -1,4 +1,5 @@
-﻿using BookAFlight.Entities;
+﻿using System.Net;
+using BookAFlight.Entities;
 using BookAFlight.Exceptions;
 using BookAFlight.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace BookAFlight.Controllers
 {
     [ApiController]
     [Produces("application/json")]
-    //[Authorize(Roles = "Mechanic")]
+    [Authorize(Roles = "Mechanic")]         
     [Route("api/[controller]")]
     public class FleetController : ControllerBase
     {
@@ -82,12 +83,25 @@ namespace BookAFlight.Controllers
         {
             try
             {
-                return Ok(_fleetService.ReplaceAircraftData(newData));
+                return Created( new Uri($"api/Fleet/id/{newData.Id}", UriKind.Absolute), _fleetService.ReplaceAircraftData(newData));
             }
-            catch (Exception e)
+            catch (NotFoundException)
             {
-                Console.WriteLine(e);
-                throw;
+                return NoContent();
+            }
+        }
+
+        [HttpPatch("updateAircraftData/{id}")]
+        public ActionResult UpdateAircraftDataById(int id, [FromForm] AircraftUpdateDTO newData)
+        {
+            if (id != newData.Id)  { BadRequest("id from url and data not equal"); }
+            try
+            {
+                return Created( new Uri($"api/Fleet/id/{newData.Id}", UriKind.RelativeOrAbsolute), _fleetService.ReplaceAircraftData(newData));
+            }
+            catch (NotFoundException)
+            {
+                return NoContent();
             }
         }
     }

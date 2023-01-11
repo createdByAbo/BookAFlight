@@ -130,13 +130,15 @@ namespace BookAFlight.Services
         public List<Fleet> GetAllAircrafts()
         {
             var returnedAircrafts = from aircraft in _context.Fleets
-                                   select aircraft;
+                                   select aircraft; 
             if (returnedAircrafts.ToList() == null) { throw new ArgumentException(); }
             return returnedAircrafts.ToList();
         }
 
         public Fleet ReplaceAircraftData(AircraftUpdateDTO aircraftData)
         {
+            var aircraft = _context.Fleets.Find(aircraftData.Id);
+            if (aircraft == null) {throw new NotFoundException($"Aircraft with id {aircraftData.Id} not exists"); } 
             _context.Fleets.Update(AircraftUpdateDtoToFleetEntityConverter.Convert(aircraftData));
 
             _context.SaveChangesAsync();
@@ -155,9 +157,10 @@ namespace BookAFlight.Services
             aircraft.NumberOfBusinessClassSeats = aircraftData.NumberOfBusinessClassSeats != null ? aircraftData.NumberOfBusinessClassSeats : aircraft.NumberOfBusinessClassSeats;
             aircraft.NumberOfEconomicClassSeats = aircraftData.NumberOfEconomicClassSeats != null ? aircraftData.NumberOfEconomicClassSeats : aircraft.NumberOfEconomicClassSeats;
             aircraft.NumberOfServiceSeats = aircraftData.NumberOfServiceSeats != null ? aircraftData.NumberOfServiceSeats : aircraft.NumberOfServiceSeats;
-
+            
+            _context.Update(aircraft);
+            _context.SaveChangesAsync();
             return aircraft;
         }
     }
 }
-

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
 using BookAFlight.Entities;
+using BookAFlight.Models.Functions;
 
 namespace BookAFlight.Context;
 
@@ -189,6 +190,12 @@ public partial class devEnvDbContext : DbContext
                 .WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_Role");
+        });
+
+        modelBuilder.Entity<FilterFlights>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToFunction("FilterFlights");
         });
 
         OnModelCreatingPartial(modelBuilder);

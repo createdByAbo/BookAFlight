@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookAFlight.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 
 using BookAFlight.Services;
 using BookAFlight.Models;
@@ -18,9 +19,27 @@ namespace BookAFlight.Controllers
         }
 
         [HttpGet]
-        public ActionResult FilterFlights( [FromBody] FlightFliter flightData )
+        public ActionResult FilterFlights( [FromForm] FlightFliter flightData )
         {
-            return Ok(_flightService.FilterFlights(startDate: flightData.StartDate, endDate: flightData.EndDate));
+            try
+            {
+                return Ok(_flightService.FilterFlights(startDate: flightData.StartDate, endDate: flightData.EndDate));
+            }
+            catch (NotFoundException exc)
+            {
+                return NotFound(exc.Message);
+            }
+            catch (InvalidOperationException exc)
+            {
+                switch (exc.Message)
+                {
+                    
+                    case "An exception was thrown while attempting to evaluate a LINQ query parameter expression. See the inner exception for more information. To show additional information call 'DbContextOptionsBuilder.EnableSensitiveDataLogging'.":
+                        return BadRequest("wrong data type in form");
+                    default:
+                        return BadRequest("Unknown client error");
+                }
+            }
         }
     }
 }

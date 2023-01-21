@@ -1,6 +1,7 @@
 using BookAFlight.Context;
 using BookAFlight.Entities;
 using BookAFlight.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookAFlight.Services
 {
@@ -29,4 +30,3 @@ namespace BookAFlight.Services
         }
     }
 }
-

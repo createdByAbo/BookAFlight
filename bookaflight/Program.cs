@@ -14,8 +14,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var authenticationSettings = new AuthSettings();
-        
-        // Add services to the container.
 
         builder.Services.AddControllers();
         builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
@@ -39,7 +37,7 @@ public class Program
         {
             config.RequireHttpsMetadata = false;
             config.SaveToken = true;
-            config.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            config.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidIssuer = authenticationSettings.JwtIssuer,
                 ValidAudience = authenticationSettings.JwtIssuer,
@@ -48,8 +46,7 @@ public class Program
         });
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

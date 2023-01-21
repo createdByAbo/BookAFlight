@@ -11,8 +11,8 @@
   "profiles": {
     "bookaflight": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:49183",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:54650",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -7,9 +7,7 @@ using BookAFlight.Services;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 
 namespace BookAFlight.Controllers
 {

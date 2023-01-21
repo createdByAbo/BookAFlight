@@ -1,5 +1,4 @@
-﻿using System.Net;
-using BookAFlight.Entities;
+﻿using BookAFlight.Entities;
 using BookAFlight.Exceptions;
 using BookAFlight.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;

@@ -18,12 +18,19 @@ namespace BookAFlight.Controllers
             _flightService = flightService; 
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult FilterFlights( [FromForm] FlightFliter flightData )
         {
             try
             {
-                return Ok(_flightService.FilterFlights(startDateMin: flightData.StartDateMin, startDateMax: flightData.StartDateMax));
+                var res = _flightService.FilterFlights(startDateMin: flightData.StartDateMin,
+                    startDateMax: flightData.StartDateMax, startCity: flightData.StartCity, endCity: flightData.EndCity);
+                if (res.Count() == 0)
+                {   
+                    return NotFound();
+                }
+
+                return Ok(res);
             }
             catch (NotFoundException exc)
             {

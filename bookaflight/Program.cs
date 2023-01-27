@@ -15,6 +15,17 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         var authenticationSettings = new AuthSettings();
 
+        var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                policy  =>
+                {
+                    policy.WithOrigins("*");
+                });
+        });
+        
         builder.Services.AddControllers();
         builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
         builder.Services.AddControllers().AddJsonOptions(x =>
@@ -55,6 +66,9 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        
+        app.UseCors(MyAllowSpecificOrigins);
+        
         app.UseAuthentication();
         app.UseAuthorization();
 

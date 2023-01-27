@@ -192,12 +192,6 @@ public partial class devEnvDbContext : DbContext
                 .HasConstraintName("FK_Role");
         });
 
-        modelBuilder.Entity<FilterFlights>(entity =>
-        {
-            entity.HasNoKey();
-            entity.ToFunction("FilterFlights");
-        });
-
         OnModelCreatingPartial(modelBuilder);
     }
 

@@ -23,7 +23,7 @@ namespace BookAFlight.Controllers
         {
             try
             {
-                return Ok(_flightService.FilterFlights(startDate: flightData.StartDate, endDate: flightData.EndDate));
+                return Ok(_flightService.FilterFlights(startDateMin: flightData.StartDate, startDateMax: flightData.EndDate));
             }
             catch (NotFoundException exc)
             {

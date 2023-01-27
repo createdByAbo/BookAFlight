@@ -7,7 +7,7 @@ namespace BookAFlight.Services
 {
     public interface IFlightService
     {
-        List<Flight> FilterFlights(string startCity = "", string startAirport = "", string startDate = "", string endCity = "", string endAirport = "", string endDate = "");
+        List<Flight> FilterFlights(string startDateMin = "", string startDateMax = "");
     }
 
     public class FlightService : IFlightService
@@ -19,14 +19,13 @@ namespace BookAFlight.Services
             _context = context;
         }
 
-        public List<Flight> FilterFlights(string startCity = "", string startAirport = "", string startDate = "", string endCity = "",
-            string endAirport = "", string endDate = "")
+        public List<Flight> FilterFlights(string startDateMin = "", string startDateMax = "")
         {
-            var flight = from flights in _context.Flights
-                where flights.StartDateOnly == DateTime.Parse(startDate)
-                select flights;
-            if (flight.Count() < 1) { throw new NotFoundException("Flight not found"); } 
-            return flight.ToList();
+            var flights = from Flights in _context.Flights
+                where Flights.StartDate >= DateTime.Parse(startDateMin) &&
+                      Flights.StartDate <= DateTime.Parse(startDateMax).AddDays(1)
+                select Flights;
+            return flights.ToList();
         }
     }
 }

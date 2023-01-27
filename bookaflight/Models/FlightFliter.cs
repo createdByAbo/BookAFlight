@@ -2,11 +2,13 @@ namespace BookAFlight.Models
 {
     public class FlightFliter
     {
-        public string? StartDate { get; set; }
+        public string StartDateMin { get; set; }
+        public string StartDateMax { get; set; }
         public string? StartCity { get; set; }
-        public string? StartAirport { get; set; }
-        public string? EndDate { get; set; }
+        public string? StartAirportICAO { get; set; }
+        public string? EndDateMin { get; set; }
+        public string? EndDateMax { get; set; }
         public string? EndCity { get; set; }
-        public string? EndAirport { get; set; }
+        public string? EndAirportICAO { get; set; }
     }
 }

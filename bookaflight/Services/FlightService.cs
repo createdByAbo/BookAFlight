@@ -21,10 +21,10 @@ namespace BookAFlight.Services
 
         public List<Flight> FilterFlights(string startDateMin = "", string startDateMax = "")
         {
-            var flights = from Flights in _context.Flights
-                where Flights.StartDate >= DateTime.Parse(startDateMin) &&
-                      Flights.StartDate <= DateTime.Parse(startDateMax).AddDays(1)
-                select Flights;
+            var flights = from flight in _context.Flights
+                where flight.StartDate >= DateTime.Parse(startDateMin) &&
+                      flight.StartDate <= DateTime.Parse(startDateMax).AddDays(1)
+                select flight;
             return flights.ToList();
         }
     }

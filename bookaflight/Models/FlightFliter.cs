@@ -10,5 +10,7 @@ namespace BookAFlight.Models
         public string? EndDateMax { get; set; }
         public string? EndCity { get; set; }
         public string? EndAirportIcao { get; set; }
+
+        public string? Class { get; set; }
     }
 }

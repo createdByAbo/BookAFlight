@@ -5,6 +5,7 @@ using BookAFlight.JWT;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BookAFlight.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookAFlight;
 
@@ -22,7 +23,7 @@ public class Program
             options.AddPolicy(name: MyAllowSpecificOrigins,
                 policy  =>
                 {
-                    policy.WithOrigins("*");
+                    policy.WithOrigins("127.0.0.1");
                 });
         });
         
@@ -66,9 +67,9 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        
+
         app.UseCors(MyAllowSpecificOrigins);
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
 
